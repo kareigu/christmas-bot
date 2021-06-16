@@ -1,12 +1,12 @@
 package main
 
 import (
-	"fmt"
 	"log"
 	"os"
 	"os/signal"
 	"syscall"
-	"time"
+
+	"commands"
 
 	"github.com/bwmarrin/discordgo"
 	"github.com/joho/godotenv"
@@ -59,35 +59,7 @@ func onMessageHandler(session *discordgo.Session, msg *discordgo.MessageCreate) 
 	}
 
 	if msg.Content == Prefix+"christmas" {
-		current_time := time.Now()
-		year := current_time.Year()
-		christmas_time, _ := time.Parse(Layout, fmt.Sprintf("%d-Dec-25", year))
-		if current_time.After(christmas_time) {
-			year += 1
-		}
-
-		christmas_time, _ = time.Parse(Layout, fmt.Sprintf("%d-Dec-24", year))
-
-		duration := christmas_time.Sub(current_time)
-
-		days := int64(duration.Hours()) / 24
-		hours := int64(duration.Hours()) - days*24
-		time_until := fmt.Sprintf("Time until christmas:\n %d days, %d hours", days, hours)
-
-		image := discordgo.MessageEmbedImage{
-			URL: ChristmasImg,
-		}
-
-		embed := discordgo.MessageEmbed{
-			Title:       "Homopapat",
-			Description: time_until,
-			Type:        discordgo.EmbedTypeImage,
-			Image:       &image,
-		}
-
-		new_msg := discordgo.MessageSend{
-			Embed: &embed,
-		}
+		new_msg := commands.ChristmasCmd(Layout, ChristmasImg)
 		_, err := session.ChannelMessageSendComplex(msg.ChannelID, &new_msg)
 		if err != nil {
 			log.Println("Error sending message" + err.Error())
