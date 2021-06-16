@@ -30,6 +30,10 @@ func main() {
 	Prefix = os.Getenv("PREFIX")
 	ChristmasImg = os.Getenv("CHRISTMAS_IMG")
 
+	if bot_token == "" || Prefix == "" || ChristmasImg == "" {
+		log.Fatal("Problem with .env file, values missing")
+	}
+
 	client, err := discordgo.New("Bot " + bot_token)
 	if err != nil {
 		log.Fatal("Couldn't create bot client")
