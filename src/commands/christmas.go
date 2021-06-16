@@ -8,7 +8,11 @@ import (
 	"github.com/bwmarrin/discordgo"
 )
 
-func ChristmasCmd(Layout string, ChristmasImg string) discordgo.MessageSend {
+func ChristmasCmd(
+	session *discordgo.Session,
+	msg *discordgo.MessageCreate,
+	Layout string,
+	ChristmasImg string) {
 	current_time := time.Now()
 	year := current_time.Year()
 	christmas_time, _ := time.Parse(Layout, fmt.Sprintf("%d-Dec-25", year))
@@ -57,5 +61,8 @@ func ChristmasCmd(Layout string, ChristmasImg string) discordgo.MessageSend {
 		Embed: &embed,
 	}
 
-	return new_msg
+	_, err := session.ChannelMessageSendComplex(msg.ChannelID, &new_msg)
+	if err != nil {
+		log.Println("Error sending message" + err.Error())
+	}
 }

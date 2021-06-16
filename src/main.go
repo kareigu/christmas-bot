@@ -1,12 +1,11 @@
 package main
 
 import (
+	"cmd_handler"
 	"log"
 	"os"
 	"os/signal"
 	"syscall"
-
-	"commands"
 
 	"github.com/bwmarrin/discordgo"
 	"github.com/joho/godotenv"
@@ -54,15 +53,6 @@ func main() {
 }
 
 func onMessageHandler(session *discordgo.Session, msg *discordgo.MessageCreate) {
-	if msg.Author.ID == session.State.User.ID {
-		return
-	}
-
-	if msg.Content == Prefix+"christmas" {
-		new_msg := commands.ChristmasCmd(Layout, ChristmasImg)
-		_, err := session.ChannelMessageSendComplex(msg.ChannelID, &new_msg)
-		if err != nil {
-			log.Println("Error sending message" + err.Error())
-		}
-	}
+	handler := cmd_handler.New(Prefix, ChristmasImg, Layout, session)
+	cmd_handler.RunCmd(handler, msg)
 }
