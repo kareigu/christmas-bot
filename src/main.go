@@ -2,6 +2,7 @@ package main
 
 import (
 	"cmd_handler"
+	"commands"
 	"log"
 	"os"
 	"os/signal"
@@ -14,6 +15,7 @@ import (
 var (
 	handler cmd_handler.CommandHandler
 	client  *discordgo.Session
+	GuildID string
 )
 
 const (
@@ -29,6 +31,7 @@ func init() {
 	bot_token := os.Getenv("TOKEN")
 	prefix := os.Getenv("PREFIX")
 	christmasImg := os.Getenv("CHRISTMAS_IMG")
+	GuildID = os.Getenv("GUILD_ID")
 
 	if bot_token == "" || prefix == "" || christmasImg == "" {
 		log.Fatal("Problem with .env file, values missing")
@@ -46,6 +49,14 @@ func init() {
 	}
 }
 
+func init() {
+	client.AddHandler(func(s *discordgo.Session, i *discordgo.InteractionCreate) {
+		if h, ok := commands.Handlers[i.Data.Name]; ok {
+			h(s, i)
+		}
+	})
+}
+
 func main() {
 	client.Identify.Intents = discordgo.IntentsGuildMessages | discordgo.IntentsGuilds
 
@@ -54,6 +65,13 @@ func main() {
 	err := client.Open()
 	if err != nil {
 		log.Fatal("Couldn't start bot client")
+	}
+
+	for _, v := range commands.List {
+		_, err = client.ApplicationCommandCreate(client.State.User.ID, GuildID, v)
+		if err != nil {
+			log.Panicf("Couldn't create command %v : %v", v.Name, err)
+		}
 	}
 
 	log.Println("Running...")
