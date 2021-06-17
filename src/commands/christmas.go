@@ -68,7 +68,7 @@ func ChristmasCmd(
 	}
 }
 
-func ChristmasSlash() discordgo.MessageEmbed {
+func ChristmasSlash(s *discordgo.Session, i *discordgo.InteractionCreate) {
 	const layout = "2006-Jan-02"
 
 	current_time := time.Now()
@@ -115,5 +115,12 @@ func ChristmasSlash() discordgo.MessageEmbed {
 		Image:       &image,
 	}
 
-	return embed
+	s.InteractionRespond(i.Interaction, &discordgo.InteractionResponse{
+		Type: discordgo.InteractionResponseChannelMessageWithSource,
+		Data: &discordgo.InteractionApplicationCommandResponseData{
+			Embeds: []*discordgo.MessageEmbed{
+				&embed,
+			},
+		},
+	})
 }
