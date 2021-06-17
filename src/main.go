@@ -16,10 +16,6 @@ var (
 	GuildID string
 )
 
-const (
-	Layout = "2006-Jan-02"
-)
-
 func init() {
 	err := godotenv.Load()
 	if err != nil {

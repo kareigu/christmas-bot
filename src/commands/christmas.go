@@ -2,7 +2,6 @@ package commands
 
 import (
 	"fmt"
-	"log"
 	"time"
 
 	"github.com/bwmarrin/discordgo"
@@ -21,8 +20,6 @@ func christmasCmd(s *discordgo.Session, i *discordgo.InteractionCreate) {
 	christmas_time, _ = time.Parse(layout, fmt.Sprintf("%d-Dec-24", year))
 
 	duration := christmas_time.Sub(current_time)
-
-	log.Println(duration)
 
 	days := int64(duration.Hours()) / 24
 	hours := int64(duration.Hours()) - days*24
