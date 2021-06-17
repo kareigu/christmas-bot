@@ -11,16 +11,17 @@ import (
 func ChristmasCmd(
 	session *discordgo.Session,
 	msg *discordgo.MessageCreate,
-	Layout string,
-	ChristmasImg string) {
+	christmasImg string) {
+	const layout = "2006-Jan-02"
+
 	current_time := time.Now()
 	year := current_time.Year()
-	christmas_time, _ := time.Parse(Layout, fmt.Sprintf("%d-Dec-25", year))
+	christmas_time, _ := time.Parse(layout, fmt.Sprintf("%d-Dec-25", year))
 	if current_time.After(christmas_time) {
 		year += 1
 	}
 
-	christmas_time, _ = time.Parse(Layout, fmt.Sprintf("%d-Dec-24", year))
+	christmas_time, _ = time.Parse(layout, fmt.Sprintf("%d-Dec-24", year))
 
 	duration := christmas_time.Sub(current_time)
 
@@ -47,7 +48,7 @@ func ChristmasCmd(
 		nanoseconds)
 
 	image := discordgo.MessageEmbedImage{
-		URL: ChristmasImg,
+		URL: christmasImg,
 	}
 
 	embed := discordgo.MessageEmbed{

@@ -7,34 +7,18 @@ import (
 )
 
 type CommandHandler struct {
-	prefix       string
-	christmasimg string
-	layout       string
-	session      *discordgo.Session
-}
-
-func New(
-	prefix string,
-	christmasimg string,
-	layout string,
-	session *discordgo.Session) *CommandHandler {
-	cmd_handler := CommandHandler{
-		prefix:       prefix,
-		christmasimg: christmasimg,
-		layout:       layout,
-		session:      session,
-	}
-
-	return &cmd_handler
+	Prefix       string
+	Christmasimg string
+	Session      *discordgo.Session
 }
 
 func RunCmd(cmd_handler *CommandHandler, msg *discordgo.MessageCreate) {
-	if msg.Author.ID == cmd_handler.session.State.User.ID {
+	if msg.Author.ID == cmd_handler.Session.State.User.ID {
 		return
 	}
 
 	switch msg.Content {
-	case cmd_handler.prefix + "christmas":
-		commands.ChristmasCmd(cmd_handler.session, msg, cmd_handler.layout, cmd_handler.christmasimg)
+	case cmd_handler.Prefix + "christmas":
+		commands.ChristmasCmd(cmd_handler.Session, msg, cmd_handler.Christmasimg)
 	}
 }

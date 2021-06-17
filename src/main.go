@@ -12,8 +12,7 @@ import (
 )
 
 var (
-	Prefix       string
-	ChristmasImg string
+	handler cmd_handler.CommandHandler
 )
 
 const (
@@ -27,10 +26,10 @@ func main() {
 	}
 
 	bot_token := os.Getenv("TOKEN")
-	Prefix = os.Getenv("PREFIX")
-	ChristmasImg = os.Getenv("CHRISTMAS_IMG")
+	prefix := os.Getenv("PREFIX")
+	christmasImg := os.Getenv("CHRISTMAS_IMG")
 
-	if bot_token == "" || Prefix == "" || ChristmasImg == "" {
+	if bot_token == "" || prefix == "" || christmasImg == "" {
 		log.Fatal("Problem with .env file, values missing")
 	}
 
@@ -48,6 +47,12 @@ func main() {
 
 	client.AddHandler(onMessageHandler)
 
+	handler = cmd_handler.CommandHandler{
+		Session:      client,
+		Prefix:       prefix,
+		Christmasimg: christmasImg,
+	}
+
 	log.Println("Running...")
 	sc := make(chan os.Signal, 1)
 	signal.Notify(sc, syscall.SIGINT, syscall.SIGTERM, os.Interrupt, os.Kill)
@@ -56,7 +61,6 @@ func main() {
 	client.Close()
 }
 
-func onMessageHandler(session *discordgo.Session, msg *discordgo.MessageCreate) {
-	handler := cmd_handler.New(Prefix, ChristmasImg, Layout, session)
-	cmd_handler.RunCmd(handler, msg)
+func onMessageHandler(_ *discordgo.Session, msg *discordgo.MessageCreate) {
+	cmd_handler.RunCmd(&handler, msg)
 }
