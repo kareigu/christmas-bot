@@ -43,6 +43,10 @@ func init() {
 	client.AddHandler(func(s *discordgo.Session, i *discordgo.InteractionCreate) {
 		if h, ok := commands.Handlers[i.Data.Name]; ok {
 			h(s, i)
+			log.Printf("%v#%v ran command %v",
+				i.Member.User.Username,
+				i.Member.User.ID,
+				i.Data.Name)
 		}
 	})
 }
