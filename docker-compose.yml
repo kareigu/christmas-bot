@@ -1,0 +1,5 @@
+services:
+  bot:
+    image: mxr/christmas-bot
+    container_name: ChristmasBot
+    restart: unless-stopped
