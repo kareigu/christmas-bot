@@ -2,6 +2,7 @@ package commands
 
 import (
 	"fmt"
+	"os"
 	"time"
 
 	"github.com/bwmarrin/discordgo"
@@ -46,8 +47,10 @@ func christmasCmd(s *discordgo.Session, i *discordgo.InteractionCreate) {
 		microseconds,
 		nanoseconds)
 
+	imageURL := os.Getenv("CHRISTMAS_IMG")
+
 	image := discordgo.MessageEmbedImage{
-		URL: "https://mxrr.dev/files/lmao%20-%20Copy.gif",
+		URL: imageURL,
 	}
 
 	embed := discordgo.MessageEmbed{
