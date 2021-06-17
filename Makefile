@@ -6,3 +6,6 @@ run:
 
 clean:
 	go clean
+
+docker:
+	docker build -t mxr/christmas-bot:latest .
