@@ -13,13 +13,14 @@ import (
 
 var (
 	handler cmd_handler.CommandHandler
+	client  *discordgo.Session
 )
 
 const (
 	Layout = "2006-Jan-02"
 )
 
-func main() {
+func init() {
 	err := godotenv.Load()
 	if err != nil {
 		log.Fatal("Couldn't load env file")
@@ -33,24 +34,26 @@ func main() {
 		log.Fatal("Problem with .env file, values missing")
 	}
 
-	client, err := discordgo.New("Bot " + bot_token)
+	client, err = discordgo.New("Bot " + bot_token)
 	if err != nil {
 		log.Fatal("Couldn't create bot client")
 	}
-
-	err = client.Open()
-	if err != nil {
-		log.Fatal("Couldn't start bot client")
-	}
-
-	client.Identify.Intents = discordgo.IntentsGuildMessages | discordgo.IntentsGuilds
-
-	client.AddHandler(onMessageHandler)
 
 	handler = cmd_handler.CommandHandler{
 		Session:      client,
 		Prefix:       prefix,
 		Christmasimg: christmasImg,
+	}
+}
+
+func main() {
+	client.Identify.Intents = discordgo.IntentsGuildMessages | discordgo.IntentsGuilds
+
+	client.AddHandler(onMessageHandler)
+
+	err := client.Open()
+	if err != nil {
+		log.Fatal("Couldn't start bot client")
 	}
 
 	log.Println("Running...")
