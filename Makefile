@@ -3,3 +3,6 @@ build:
 
 run:
 	go run src/main.go
+
+clean:
+	go clean
