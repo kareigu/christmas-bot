@@ -7,6 +7,11 @@ import (
 	"github.com/bwmarrin/discordgo"
 )
 
+var christmasInfo = discordgo.ApplicationCommand{
+	Name:        "christmas",
+	Description: "Time until christmas",
+}
+
 func christmasCmd(s *discordgo.Session, i *discordgo.InteractionCreate) {
 	const layout = "2006-Jan-02"
 

@@ -6,13 +6,12 @@ import (
 
 var (
 	List = []*discordgo.ApplicationCommand{
-		{
-			Name:        "christmas",
-			Description: "Time until christmas",
-		},
+		&christmasInfo,
 	}
 
-	Handlers = map[string]func(s *discordgo.Session, i *discordgo.InteractionCreate){
+	Handlers = map[string]func(
+		s *discordgo.Session,
+		i *discordgo.InteractionCreate){
 		"christmas": christmasCmd,
 	}
 )
