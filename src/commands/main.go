@@ -13,6 +13,6 @@ var (
 	}
 
 	Handlers = map[string]func(s *discordgo.Session, i *discordgo.InteractionCreate){
-		"christmas": ChristmasSlash,
+		"christmas": christmasCmd,
 	}
 )
