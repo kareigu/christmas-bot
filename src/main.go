@@ -49,6 +49,9 @@ func init() {
 
 func main() {
 	client.Identify.Intents = discordgo.IntentsGuildMessages | discordgo.IntentsGuilds
+	client.AddHandler(func(s *discordgo.Session, r *discordgo.Ready) {
+		log.Println("Running...")
+	})
 
 	err := client.Open()
 	if err != nil {
@@ -62,7 +65,6 @@ func main() {
 		}
 	}
 
-	log.Println("Running...")
 	sc := make(chan os.Signal, 1)
 	signal.Notify(sc, syscall.SIGINT, syscall.SIGTERM, os.Interrupt, os.Kill)
 	<-sc
